@@ -1,0 +1,134 @@
+# Enhanced Git Configuration
+# Add to your ~/.gitconfig with: git config --global include.path ~/claude/projects/optimize_cli/.gitconfig_enhanced
+
+[alias]
+    # Status & Info
+    s = status -sb
+    st = status
+    info = remote -v
+
+    # Logs
+    l = log --oneline --graph --decorate -20
+    ll = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    tree = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+    last = log -1 HEAD --stat
+    today = log --since=midnight --author="$(git config user.name)" --oneline
+
+    # Diff
+    d = diff
+    ds = diff --staged
+    dw = diff --word-diff
+
+    # Add & Commit
+    a = add
+    aa = add --all
+    ap = add --patch
+    c = commit -v
+    cm = commit -m
+    ca = commit -v --amend
+    can = commit -v --amend --no-edit
+
+    # Branch
+    b = branch
+    ba = branch -a
+    bd = branch -d
+    bD = branch -D
+    bm = branch -m
+
+    # Checkout
+    co = checkout
+    cob = checkout -b
+    com = checkout main
+    cod = checkout develop
+
+    # Pull & Push
+    pl = pull
+    plo = pull origin
+    plom = pull origin main
+    ps = push
+    pso = push origin
+    psom = push origin main
+    psf = push --force-with-lease
+
+    # Stash
+    st = stash
+    sta = stash apply
+    stl = stash list
+    stp = stash pop
+    std = stash drop
+
+    # Rebase
+    rb = rebase
+    rbi = rebase -i
+    rbc = rebase --continue
+    rba = rebase --abort
+
+    # Reset
+    unstage = reset HEAD --
+    undo = reset HEAD~1
+    hard = reset --hard
+
+    # Other
+    aliases = config --get-regexp alias
+    contributors = shortlog --summary --numbered
+    ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
+
+[core]
+    editor = nano
+    autocrlf = input
+    whitespace = trailing-space,space-before-tab
+
+[color]
+    ui = auto
+    branch = auto
+    diff = auto
+    status = auto
+
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+
+[color "status"]
+    added = green
+    changed = yellow
+    untracked = red
+
+[delta]
+    navigate = true
+    light = false
+    line-numbers = true
+    side-by-side = true
+
+[diff]
+    tool = delta
+    colorMoved = default
+
+[merge]
+    tool = delta
+    conflictstyle = diff3
+
+[interactive]
+    diffFilter = delta --color-only
+
+[pull]
+    rebase = false
+
+[push]
+    default = simple
+    followTags = true
+
+[fetch]
+    prune = true
+
+[rebase]
+    autoStash = true
+
+[help]
+    autocorrect = 1

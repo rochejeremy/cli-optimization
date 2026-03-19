@@ -1,0 +1,47 @@
+# SSH Configuration Template
+# Copy to ~/.ssh/config
+
+# Global defaults
+Host *
+    # Connection multiplexing
+    ControlMaster auto
+    ControlPath ~/.ssh/control-%r@%h:%p
+    ControlPersist 10m
+
+    # Keep connections alive
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+    # Connection timeout
+    ConnectTimeout 10
+
+    # Use SSH keys
+    IdentitiesOnly yes
+
+    # Compression
+    Compression yes
+
+    # Reuse connections
+    TCPKeepAlive yes
+
+# Example: Gammadrum
+Host gammadrum
+    HostName <REPLACE_WITH_IP_OR_HOSTNAME>
+    User <REPLACE_WITH_USERNAME>
+    IdentityFile ~/.ssh/id_rsa
+    # Port 22  # Uncomment if non-standard port
+
+# Example: Zissou-OC-1
+Host zissou zissou-oc-1
+    HostName 18.119.115.3
+    User ubuntu
+    IdentityFile ~/windows/Desktop/Zissou-OC Getting Started/Zissou-ssh-key.pem
+    StrictHostKeyChecking no
+
+# GitHub
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa
+
+# Add more hosts as needed...

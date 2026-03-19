@@ -1,0 +1,263 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "actions":
+    [
+        {
+            "command":
+            {
+                "action": "copy",
+                "singleLine": false
+            },
+            "id": "User.copy.644BA8F2"
+        },
+        {
+            "command": "paste",
+            "id": "User.paste"
+        },
+        {
+            "command":
+            {
+                "action": "splitPane",
+                "split": "auto",
+                "splitMode": "duplicate"
+            },
+            "id": "User.splitPane.A6751878"
+        },
+        {
+            "command": "find",
+            "id": "User.find"
+        }
+    ],
+    "copyFormatting": "none",
+    "copyOnSelect": false,
+    "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+    "keybindings":
+    [
+        {
+            "id": "User.copy.644BA8F2",
+            "keys": "ctrl+c"
+        },
+        {
+            "id": "User.find",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "id": "User.paste",
+            "keys": "ctrl+v"
+        },
+        {
+            "id": "User.splitPane.A6751878",
+            "keys": "alt+shift+d"
+        }
+    ],
+    "newTabMenu":
+    [
+        {
+            "type": "remainingProfiles"
+        }
+    ],
+    "profiles":
+    {
+        "defaults":
+        {
+            "adjustIndistinguishableColors": "indexed",
+            "colorScheme": "Tango Dark",
+            "experimental.retroTerminalEffect": false,
+            "font":
+            {
+                "size": 14,
+                "weight": "semi-light"
+            },
+            "opacity": 96,
+            "padding": "16",
+            "useAcrylic": true
+        },
+        "list":
+        [
+            {
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": true,
+                "name": "Windows PowerShell"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "Command Prompt"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "experimental.retroTerminalEffect": false,
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "hidden": false,
+                "name": "PowerShell",
+                "source": "Windows.Terminal.PowershellCore"
+            },
+            {
+                "guid": "{51855cb2-8cce-5362-8f54-464b92b32386}",
+                "hidden": false,
+                "name": "Ubuntu",
+                "source": "CanonicalGroupLimited.Ubuntu_79rhkp1fndgsc"
+            },
+            {
+                "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+                "hidden": true,
+                "name": "Ubuntu",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{46ca431a-3a87-5fb3-83cd-11ececc031d2}",
+                "hidden": false,
+                "name": "kali-linux",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
+                "hidden": false,
+                "name": "Debian",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "altGrAliasing": true,
+                "antialiasingMode": "grayscale",
+                "closeOnExit": "automatic",
+                "commandline": "C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.12_3.12.752.0_x64__qbz5n2kfra8p0\\python3.12.exe",
+                "cursorShape": "bar",
+                "font":
+                {
+                    "face": "Cascadia Mono"
+                },
+                "guid": "{c966df67-7a9b-4705-b8c0-cb6c14364329}",
+                "hidden": false,
+                "historySize": 9001,
+                "icon": "C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\\_resources\\pythonx44.png",
+                "name": "Python",
+                "snapOnInput": true,
+                "startingDirectory": "C:\\Users\\roche\\Documents\\Python"
+            },
+            {
+                "backgroundImage": "C:\\Users\\roche\\OneDrive\\Documents\\Backgrounds\\griz-wal.png",
+                "backgroundImageAlignment": "topRight",
+                "backgroundImageOpacity": 0.95,
+                "backgroundImageStretchMode": "none",
+                "colorScheme": "Campbell",
+                "commandline": "ssh gammadrum",
+                "cursorShape": "doubleUnderscore",
+                "experimental.retroTerminalEffect": false,
+                "font":
+                {
+                    "size": 12,
+                    "weight": "normal"
+                },
+                "guid": "{473251e4-ec3f-4dab-a606-1b6edab86902}",
+                "hidden": false,
+                "icon": "ms-appx:///ProfileIcons/pwsh.png",
+                "name": "ssh gammadrum",
+                "opacity": 54,
+                "padding": "9",
+                "startingDirectory": "%USERPROFILE%"
+            },
+            {
+                "backgroundImage": "C:\\Users\\roche\\OneDrive\\Pictures\\black-background.png",
+                "backgroundImageAlignment": "topRight",
+                "backgroundImageOpacity": 1,
+                "backgroundImageStretchMode": "fill",
+                "colorScheme": "Campbell",
+                "commandline": "C:\\Users\\roche\\AppData\\Roaming\\npm\\gemini.cmd",
+                "cursorShape": "doubleUnderscore",
+                "experimental.retroTerminalEffect": false,
+                "font":
+                {
+                    "size": 12,
+                    "weight": "normal"
+                },
+                "guid": "{336cfb26-504f-4c87-89bb-77fe04bb0ff0}",
+                "hidden": false,
+                "icon": "ms-appx:///ProfileIcons/pwsh.png",
+                "name": "Gemini-CLI",
+                "opacity": 0,
+                "padding": "9",
+                "startingDirectory": "C:\\Users\\roche\\OneDrive\\Documents\\git\\roche.jd@gmail.com\\prompt-alchemy-canvas-labs"
+            },
+            {
+                "bellSound":
+                [
+                    "C:\\Users\\roche\\Documents\\sounds\\156064_marcolo91_bicycle-bell.wav"
+                ],
+                "bellStyle":
+                [
+                    "audible",
+                    "window",
+                    "taskbar"
+                ],
+                "commandline": "wsl -d Ubuntu --cd ~/claude/projects/",
+                "cursorShape": "filledBox",
+                "font":
+                {
+                    "face": "Cascadia Mono"
+                },
+                "guid": "{15f25581-9568-43ee-bed7-788f5ad483d0}",
+                "hidden": false,
+                "icon": "C:\\Users\\roche\\OneDrive\\Pictures\\Claude_AI_symbol.svg.png",
+                "name": "Claud Code",
+                "startingDirectory": "//wsl$/Ubuntu/home/",
+                "tabTitle": "Ubuntu"
+            },
+            {
+                "bellSound":
+                [
+                    "C:\\Users\\roche\\Documents\\sounds\\156064_marcolo91_bicycle-bell.wav"
+                ],
+                "bellStyle":
+                [
+                    "audible",
+                    "window",
+                    "taskbar"
+                ],
+                "commandline": "wsl -d Ubuntu -u gemini --cd /home/gemini/",
+                "cursorShape": "filledBox",
+                "font":
+                {
+                    "face": "Cascadia Mono"
+                },
+                "guid": "{b3363b30-b80e-47f7-8aa8-1262c58164b2}",
+                "hidden": false,
+                "icon": "C:\\Users\\roche\\OneDrive\\Pictures\\gemini.png",
+                "name": "gemini",
+                "startingDirectory": null,
+                "tabTitle": "Ubuntu"
+            },
+            {
+                "backgroundImage": "C:\\Users\\roche\\OneDrive\\Documents\\Backgrounds\\griz-wal.png",
+                "backgroundImageAlignment": "topRight",
+                "backgroundImageOpacity": 0.95,
+                "backgroundImageStretchMode": "none",
+                "colorScheme": "Campbell",
+                "commandline": "ssh ubuntu@18.119.115.3 -i C:\\Users\\roche\\OneDrive\\Desktop\\Zissou-OC Getting Started\\Zissou-ssh-key.pem",
+                "cursorShape": "doubleUnderscore",
+                "experimental.retroTerminalEffect": false,
+                "font":
+                {
+                    "size": 12,
+                    "weight": "normal"
+                },
+                "guid": "{9a05c726-311a-4f51-93f7-1cdda98e746a}",
+                "hidden": false,
+                "icon": "ms-appx:///ProfileIcons/pwsh.png",
+                "name": "ssh Zissou-oc-1",
+                "opacity": 54,
+                "padding": "9",
+                "startingDirectory": "%USERPROFILE%"
+            }
+        ]
+    },
+    "schemes": [],
+    "themes": []
+}

@@ -1,0 +1,349 @@
+# ============================================================
+# Enhanced Bash Configuration for CLI Optimization
+# Add to your ~/.bashrc: source ~/claude/projects/optimize_cli/.bashrc_enhanced
+# ============================================================
+
+# ============================================================
+# HISTORY CONFIGURATION
+# ============================================================
+HISTSIZE=50000                    # Commands in memory
+HISTFILESIZE=100000               # Commands in history file
+HISTCONTROL=ignoreboth:erasedups  # No duplicates or space-prefixed
+HISTTIMEFORMAT="%F %T "          # Add timestamps
+shopt -s histappend              # Append, don't overwrite
+shopt -s cmdhist                 # Multi-line commands as one entry
+
+# Save history after each command
+PROMPT_COMMAND="history -a; history -n"
+
+# ============================================================
+# BETTER DIRECTORY NAVIGATION
+# ============================================================
+shopt -s autocd                  # cd by typing directory name
+shopt -s cdspell                 # Auto-correct cd typos
+shopt -s dirspell                # Auto-correct directory name typos
+CDPATH=".:~:~/claude/projects"   # Search these paths for cd
+
+# Quick navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias -- -='cd -'                # Go back to previous directory
+
+# Directory shortcuts
+alias projects='cd ~/claude/projects'
+alias dl='cd ~/Downloads'
+alias docs='cd ~/Documents'
+alias screenshots='cd /mnt/c/Users/roche/OneDrive/Documents/ShareX/Screenshots/$(date +%Y-%m)'
+
+# ============================================================
+# MODERN LS REPLACEMENTS
+# ============================================================
+# Use eza if available, otherwise ls with colors
+if command -v eza &> /dev/null; then
+    alias ls='eza --icons --group-directories-first'
+    alias ll='eza -l --icons --group-directories-first --git'
+    alias la='eza -la --icons --group-directories-first --git'
+    alias lt='eza -T --icons --group-directories-first --level=2'
+    alias tree='eza -T --icons'
+else
+    alias ls='ls --color=auto --group-directories-first'
+    alias ll='ls -lhF'
+    alias la='ls -lAhF'
+    alias l='ls -CF'
+fi
+
+# ============================================================
+# BETTER CAT WITH BAT
+# ============================================================
+if command -v bat &> /dev/null; then
+    alias cat='bat --paging=never'
+    alias catt='bat'  # Original bat with paging
+elif command -v batcat &> /dev/null; then
+    alias cat='batcat --paging=never'
+    alias catt='batcat'
+fi
+
+# ============================================================
+# BETTER GREP WITH RIPGREP
+# ============================================================
+if command -v rg &> /dev/null; then
+    alias grep='rg'
+    alias oldgrep='/usr/bin/grep --color=auto'
+else
+    alias grep='grep --color=auto'
+fi
+
+# ============================================================
+# BETTER FIND WITH FD
+# ============================================================
+if command -v fdfind &> /dev/null; then
+    alias fd='fdfind'
+fi
+if command -v fd &> /dev/null; then
+    alias find='fd'
+    alias oldfind='/usr/bin/find'
+fi
+
+# ============================================================
+# FZF CONFIGURATION (Fuzzy Finder)
+# ============================================================
+if command -v fzf &> /dev/null; then
+    # Use fd for fzf if available (faster and respects .gitignore)
+    if command -v fd &> /dev/null || command -v fdfind &> /dev/null; then
+        export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+        export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+    fi
+
+    # Better colors and preview
+    export FZF_DEFAULT_OPTS="
+        --height 40%
+        --layout=reverse
+        --border
+        --inline-info
+        --color=fg:#d0d0d0,bg:#121212,hl:#5f87af
+        --color=fg+:#d0d0d0,bg+:#262626,hl+:#5fd7ff
+        --color=info:#afaf87,prompt:#d7005f,pointer:#af5fff
+        --color=marker:#87ff00,spinner:#af5fff,header:#87afaf
+    "
+
+    # Use bat for file preview if available
+    if command -v bat &> /dev/null || command -v batcat &> /dev/null; then
+        export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :500 {}'"
+    fi
+
+    # Fuzzy search history (Ctrl+R)
+    bind '"\C-r": "\C-x1\e^\C-x2\e[0n"'
+    bind -x '"\C-x1": __fzf_history';
+    bind '"\C-x2": "\e[5C\C-k\C-y\ey\C-x3\e[5D"'
+    bind -x '"\C-x3": "__fzf_history_post_event__"';
+
+    __fzf_history() {
+        __fzf_history__=$(fc -lnr -2147483648 | fzf +s +m -x --tac --no-sort)
+    }
+
+    __fzf_history_post_event__() {
+        READLINE_LINE=${__fzf_history__}
+        READLINE_POINT=${#READLINE_LINE}
+    }
+
+    # Fuzzy cd (Alt+C)
+    source /usr/share/doc/fzf/examples/key-bindings.bash 2>/dev/null
+fi
+
+# ============================================================
+# ZOXIDE (Smart cd with frecency)
+# ============================================================
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init bash)"
+    alias cd='z'
+    alias cdi='zi'  # Interactive selection
+fi
+
+# ============================================================
+# GIT ALIASES & FUNCTIONS
+# ============================================================
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gaa='git add --all'
+alias gc='git commit -v'
+alias gcm='git commit -m'
+alias gca='git commit -v --amend'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gl='git log --oneline --graph --decorate -20'
+alias gll='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+alias gp='git push'
+alias gpl='git pull'
+alias gco='git checkout'
+alias gb='git branch'
+alias gba='git branch -a'
+alias gst='git stash'
+alias gsta='git stash apply'
+alias gstl='git stash list'
+
+# Quick git status
+function gss() {
+    git status -sb
+}
+
+# Git clone and cd into directory
+function gcl() {
+    git clone "$1" && cd "$(basename "$1" .git)"
+}
+
+# ============================================================
+# SYSTEM ALIASES
+# ============================================================
+alias c='clear'
+alias h='history'
+alias j='jobs'
+alias v='vim'
+alias e='nano'
+
+# Safer operations
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias mkdir='mkdir -pv'
+
+# System info
+alias update='sudo apt update && sudo apt upgrade -y'
+alias install='sudo apt install'
+alias remove='sudo apt remove'
+alias search='apt search'
+alias disk='df -h'
+alias mem='free -h'
+alias ports='netstat -tulanp'
+
+# Process management
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'
+alias myip='curl -s ifconfig.me'
+alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -'
+
+# ============================================================
+# USEFUL FUNCTIONS
+# ============================================================
+
+# Make directory and cd into it
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Extract any archive
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xvjf "$1"    ;;
+            *.tar.gz)    tar xvzf "$1"    ;;
+            *.tar.xz)    tar xvJf "$1"    ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xvf "$1"     ;;
+            *.tbz2)      tar xvjf "$1"    ;;
+            *.tgz)       tar xvzf "$1"    ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "Unknown archive format: $1" ;;
+        esac
+    else
+        echo "File not found: $1"
+    fi
+}
+
+# Find and kill process by name
+killp() {
+    ps aux | grep -v grep | grep "$1" | awk '{print $2}' | xargs kill -9
+}
+
+# Quick file/directory search
+ff() {
+    find . -type f -iname "*$1*"
+}
+
+fdir() {
+    find . -type d -iname "*$1*"
+}
+
+# ShareX screenshot helpers
+latest-screenshot() {
+    local screenshot_dir="/mnt/c/Users/roche/OneDrive/Documents/ShareX/Screenshots/$(date +%Y-%m)"
+    if [ -d "$screenshot_dir" ]; then
+        ls -t "$screenshot_dir"/*.png 2>/dev/null | head -1
+    else
+        echo "Screenshot directory not found: $screenshot_dir"
+        return 1
+    fi
+}
+
+list-screenshots() {
+    local count="${1:-10}"
+    local screenshot_dir="/mnt/c/Users/roche/OneDrive/Documents/ShareX/Screenshots/$(date +%Y-%m)"
+    if [ -d "$screenshot_dir" ]; then
+        ls -lth "$screenshot_dir"/*.png 2>/dev/null | head -"$count"
+    else
+        echo "Screenshot directory not found: $screenshot_dir"
+        return 1
+    fi
+}
+
+open-screenshot() {
+    local screenshot=$(latest-screenshot)
+    if [ -n "$screenshot" ]; then
+        echo "Opening: $screenshot"
+        explorer.exe "$screenshot"
+    fi
+}
+
+# Backup a file
+backup() {
+    cp "$1"{,.bak-$(date +%Y%m%d-%H%M%S)}
+}
+
+# ============================================================
+# WSL-SPECIFIC CONFIGURATIONS
+# ============================================================
+
+# Clipboard integration (WSL to Windows)
+if grep -qi microsoft /proc/version 2>/dev/null; then
+    alias pbcopy='clip.exe'
+    alias pbpaste='powershell.exe -command "Get-Clipboard"'
+
+    # Open Windows Explorer in current directory
+    alias explorer='explorer.exe .'
+
+    # Open files with default Windows application
+    alias open='explorer.exe'
+fi
+
+# ============================================================
+# STARSHIP PROMPT
+# ============================================================
+if command -v starship &> /dev/null; then
+    eval "$(starship init bash)"
+fi
+
+# ============================================================
+# DEVELOPMENT TOOLS
+# ============================================================
+
+# Python virtual environment shortcut
+alias venv='python3 -m venv venv'
+alias activate='source venv/bin/activate'
+
+# Node/npm shortcuts
+alias ni='npm install'
+alias nid='npm install --save-dev'
+alias nrs='npm run start'
+alias nrt='npm run test'
+alias nrb='npm run build'
+
+# Docker shortcuts
+alias d='docker'
+alias dc='docker-compose'
+alias dps='docker ps'
+alias di='docker images'
+alias dex='docker exec -it'
+alias dlog='docker logs -f'
+
+# ============================================================
+# PERFORMANCE
+# ============================================================
+
+# Disable XON/XOFF flow control (enables Ctrl+S for forward search)
+stty -ixon
+
+# ============================================================
+echo "✓ Enhanced bash configuration loaded"
+echo "  Optimization features:"
+echo "  - Extended history (50k entries with timestamps)"
+echo "  - Smart directory navigation"
+echo "  - Modern CLI tools integration (eza, bat, ripgrep, fzf)"
+echo "  - Git aliases and functions"
+echo "  - WSL clipboard integration"
+echo "  - Useful functions: mkcd, extract, backup, killp"
