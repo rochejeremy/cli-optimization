@@ -31,12 +31,13 @@ Host gammadrum
     IdentityFile ~/.ssh/id_rsa
     # Port 22  # Uncomment if non-standard port
 
-# Example: Zissou-OC-1
-Host zissou zissou-oc-1
-    HostName 18.119.115.3
-    User ubuntu
-    IdentityFile ~/windows/Desktop/Zissou-OC Getting Started/Zissou-ssh-key.pem
-    StrictHostKeyChecking no
+# Example: Remote Server
+Host myserver
+    HostName <REPLACE_WITH_YOUR_IP>
+    User <REPLACE_WITH_USERNAME>
+    IdentityFile ~/.ssh/id_rsa
+    # Port 22  # Uncomment if non-standard port
+    # StrictHostKeyChecking ask  # Prompts on first connect (default)
 
 # GitHub
 Host github.com
