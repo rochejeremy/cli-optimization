@@ -60,6 +60,7 @@ User has optimized bash environment loaded from:
 - **zoxide (z)** - Smart cd that learns habits
 - **tldr** - Simplified man pages
 - **git-delta** - Beautiful git diffs
+- **tmux** - Terminal multiplexer for session persistence (optimized for WSL)
 
 ### Common Aliases
 ```bash

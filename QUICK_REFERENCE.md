@@ -37,6 +37,21 @@ source ~/.bashrc                 # Reload configuration
 | `F11` | Fullscreen |
 | `Ctrl++/-` | Zoom in/out |
 
+## 🪟 Tmux Shortcuts (Multiplexer)
+*Prefix is `Ctrl+a`*
+
+| Shortcut | Action |
+|----------|--------|
+| `Prefix + r` | Reload config |
+| `Prefix + \|` | Split horizontal |
+| `Prefix + -` | Split vertical |
+| `Prefix + h/j/k/l` | Navigate panes (Vim keys) |
+| `Shift + Left/Right` | Switch windows |
+| `Prefix + [` | Enter Copy Mode (Vim keys) |
+| `Prefix + I` | Install TPM plugins |
+| `Prefix + d` | Detach session |
+| `tmux attach` | Re-attach to last session |
+
 ## 🔍 FZF (Fuzzy Finder)
 | Shortcut | Action |
 |----------|--------|

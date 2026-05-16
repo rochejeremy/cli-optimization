@@ -9,11 +9,12 @@ echo "  CLI Optimization - Quick Setup"
 echo "========================================"
 echo ""
 
-PROJECT_DIR="$HOME/claude/projects/optimize_cli"
+# Project directory detection
+PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Check if we're in the right directory
-if [ ! -f "$PROJECT_DIR/.bashrc_enhanced" ]; then
-    echo "Error: Configuration files not found in $PROJECT_DIR"
+if [ ! -f "$PROJECT_DIR/bash/.bashrc_enhanced" ]; then
+    echo "Error: Configuration files not found in $PROJECT_DIR/bash"
     exit 1
 fi
 
@@ -22,10 +23,15 @@ echo "This requires sudo access."
 read -p "Install tools now? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    bash "$PROJECT_DIR/install-tools.sh"
+    if [ -f "$PROJECT_DIR/bash/install-bash-tools.sh" ]; then
+        bash "$PROJECT_DIR/bash/install-bash-tools.sh"
+    elif [ -f "$PROJECT_DIR/install-tools.sh" ]; then
+        bash "$PROJECT_DIR/install-tools.sh"
+    else
+        echo "Error: Installation script not found."
+    fi
 else
-    echo "Skipping tool installation. You can run it later with:"
-    echo "  bash $PROJECT_DIR/install-tools.sh"
+    echo "Skipping tool installation."
 fi
 
 echo ""
@@ -33,29 +39,35 @@ echo "Step 2: Activating enhanced bash configuration..."
 if ! grep -q "bashrc_enhanced" ~/.bashrc; then
     echo "" >> ~/.bashrc
     echo "# Enhanced CLI configuration" >> ~/.bashrc
-    echo "source $PROJECT_DIR/.bashrc_enhanced" >> ~/.bashrc
+    echo "source $PROJECT_DIR/bash/.bashrc_enhanced" >> ~/.bashrc
     echo "✓ Added to ~/.bashrc"
 else
-    echo "✓ Already configured in ~/.bashrc"
+    # Update the path if it changed
+    sed -i "s|source .*/bashrc_enhanced|source $PROJECT_DIR/bash/.bashrc_enhanced|g" ~/.bashrc
+    echo "✓ Already configured in ~/.bashrc (path updated if necessary)"
 fi
 
 echo ""
 echo "Step 3: Setting up Starship prompt..."
 mkdir -p ~/.config
-if [ ! -f ~/.config/starship.toml ] || [ "$PROJECT_DIR/starship.toml" -nt ~/.config/starship.toml ]; then
-    cp "$PROJECT_DIR/starship.toml" ~/.config/starship.toml
+if [ -f "$PROJECT_DIR/common/starship.toml" ]; then
+    cp "$PROJECT_DIR/common/starship.toml" ~/.config/starship.toml
     echo "✓ Starship config installed"
 else
-    echo "✓ Starship config already exists"
+    echo "✗ Starship config not found at $PROJECT_DIR/common/starship.toml"
 fi
 
 echo ""
 echo "Step 4: Configuring Git..."
-if ! git config --global --get include.path | grep -q "gitconfig_enhanced"; then
-    git config --global include.path "$PROJECT_DIR/.gitconfig_enhanced"
-    echo "✓ Git configuration included"
+if [ -f "$PROJECT_DIR/common/gitconfig_enhanced" ]; then
+    if ! git config --global --get include.path | grep -q "gitconfig_enhanced"; then
+        git config --global include.path "$PROJECT_DIR/common/gitconfig_enhanced"
+        echo "✓ Git configuration included"
+    else
+        echo "✓ Git configuration already included"
+    fi
 else
-    echo "✓ Git configuration already included"
+    echo "✗ Git config not found at $PROJECT_DIR/common/gitconfig_enhanced"
 fi
 
 echo ""
@@ -63,13 +75,15 @@ echo "Step 5: SSH configuration..."
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 if [ ! -f ~/.ssh/config ]; then
-    cp "$PROJECT_DIR/ssh_config" ~/.ssh/config
-    chmod 600 ~/.ssh/config
-    echo "✓ SSH config created (remember to customize with your hosts!)"
-    echo "  Edit with: nano ~/.ssh/config"
+    if [ -f "$PROJECT_DIR/common/ssh_config" ]; then
+        cp "$PROJECT_DIR/common/ssh_config" ~/.ssh/config
+        chmod 600 ~/.ssh/config
+        echo "✓ SSH config created"
+    else
+        echo "✗ SSH template not found at $PROJECT_DIR/common/ssh_config"
+    fi
 else
     echo "✓ SSH config already exists"
-    echo "  You can view the template at: $PROJECT_DIR/ssh_config"
 fi
 
 echo ""
@@ -78,6 +92,49 @@ if [ -f "$PROJECT_DIR/create-ai-helpers.sh" ]; then
     bash "$PROJECT_DIR/create-ai-helpers.sh"
 else
     echo "✓ AI helpers script not found (optional)"
+fi
+
+echo ""
+echo "Step 7: Creating/Updating GEMINI.md for AI agents..."
+GEMINI_MD="$PROJECT_DIR/GEMINI.md"
+if [ ! -f "$GEMINI_MD" ]; then
+    touch "$GEMINI_MD"
+fi
+
+# Use a temporary file to construct the context
+cat > "$GEMINI_MD" << 'EOF'
+# Project Environment & Tooling (Gemini CLI)
+
+## Optimized CLI Tools
+The following modern tools are installed and preferred in this environment:
+- **Navigation**: `zoxide` (use `z`)
+- **Search**: `ripgrep` (`rg`) and `fd`
+- **Viewing**: `bat` (aliased to `cat`)
+- **Listing**: `eza` (aliased to `ls`, `ll`, `lt`)
+- **Fuzzy Finding**: `fzf` (integrated into history with Ctrl+R)
+- **Prompt**: `starship` is active.
+- **Diffs**: `git-delta` (active for git operations)
+- **Multiplexer**: `tmux` (optimized for WSL)
+
+## Conventions
+- Use the provided git aliases (`gs`, `gd`, `gl`) for standard operations.
+- Prefer `fd` over `find` and `rg` over `grep`.
+- Reference `AGENTS.md` for more comprehensive environment details.
+EOF
+echo "✓ GEMINI.md created/updated"
+
+echo ""
+echo "Step 8: Setting up Tmux configuration..."
+if [ -f "$PROJECT_DIR/common/tmux.conf" ]; then
+    cp "$PROJECT_DIR/common/tmux.conf" ~/.tmux.conf
+    # Ensure TPM is installed
+    if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    fi
+    echo "✓ Tmux config installed and TPM ready"
+    echo "  (Note: Open tmux and press 'Prefix + I' to install plugins)"
+else
+    echo "✗ Tmux config not found at $PROJECT_DIR/common/tmux.conf"
 fi
 
 echo ""
